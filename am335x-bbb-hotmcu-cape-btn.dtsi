@@ -1,0 +1,69 @@
+/*
+with TI am335x BSP 06.03.00.106
+with HAOYU / www.hotmcu.com cape
+greatcat@ms18.hinet.net
+20201231.2
+If this document helps you and buy street cats a fish can.
+*/
+//
+#include <dt-bindings/input/input.h>
+&am33xx_pinmux {
+
+		gcat_gpio_keys_pins: gcat_gpio_keys_pins {
+			pinctrl-single,pins = <
+				//0x040 0x2f      /* KEY_UP gpmc_a0.gpio1_16, INPUT | PULLDIS | MODE7 */
+				AM33XX_IOPAD(0x840, PIN_INPUT | MUX_MODE7) //(R13) gpmc_a0.gpio1[16]
+				AM33XX_IOPAD(0x888, PIN_INPUT | MUX_MODE7) //(T13) gpmc_csn3.gpio2[0]
+										// BBB baseboard link with GPIO1_6
+
+				//0x04c 0x2f      /* KEY_DOWN gpmc_a3.gpio1_19, INPUT | PULLDIS | MODE7 */
+				AM33XX_IOPAD(0x84c, PIN_INPUT | MUX_MODE7) //(T14) gpmc_a3.gpio1[19]
+
+				//0x164 0x2f      /* KEY_LEFT ecap0_in_pwm0_out.gpio0_7, INPUT | PULLDIS | MODE7 */
+				AM33XX_IOPAD(0x964, PIN_INPUT | MUX_MODE7) //(C18) eCAP0_in_PWM0_out.gpio0[7]
+
+				//0x1a4 0x2f      /* KEY_ENTER mcasp0_fxr.gpio3_19, INPUT | PULLDIS | MODE7 */
+				AM33XX_IOPAD(0x9A0, PIN_INPUT | MUX_MODE7) //(B12) mcsp0_aclkr.gpio3[18] 
+										// BBB baseboard link with GPIO0_7
+			>;
+		};
+
+};
+
+/ {
+
+	buttons: user_buttons {
+		compatible = "gpio-keys";
+
+		pinctrl-names = "default";
+		pinctrl-0 = <&gcat_gpio_keys_pins>;
+		//#address-cells = <1>;
+		//#size-cells = <0>;
+
+		button0 {
+			label = "A";
+			linux,code = <KEY_A>;
+			// uapi/linux/input-event-codes.h
+			gpios = <&gpio1 16 GPIO_ACTIVE_LOW>;
+			
+		};
+
+
+		button1 {
+			label = "B";
+			linux,code = <KEY_B>;
+			// uapi/linux/input-event-codes.h
+			gpios = <&gpio0 7 GPIO_ACTIVE_LOW>;
+			
+		};
+
+		button2 {
+			label = "C";
+			linux,code = <KEY_C>;
+			// uapi/linux/input-event-codes.h
+			gpios = <&gpio1 19 GPIO_ACTIVE_LOW>;
+			
+		};
+
+	};
+};

@@ -1,0 +1,39 @@
+/*
+with TI am335x BSP 06.03.00.106
+with HAOYU / www.hotmcu.com cape
+greatcat@ms18.hinet.net
+20201231.2
+If this document helps you and buy street cats a fish can.
+*/
+//
+
+&am33xx_pinmux {
+		gcat_pwm_bkl_pins: gcat_pwm_bkl_pins {
+			pinctrl-single,pins = <
+				//0x48 0x06       /* gpmc_a2.ehrpwm1a, OMAP_MUX_MODE6 | AM33XX_PIN_OUTPUT */
+				AM33XX_IOPAD(0x848, PIN_OUTPUT | MUX_MODE6) //(U14) gpmc_a2.ehrpwm1A 
+			>;
+		};
+};
+
+&epwmss1 {
+	status = "okay";
+	ehrpwm1: pwm@48302200 {
+		status = "okay";
+		pinctrl-names = "default";
+		pinctrl-0 = <&gcat_pwm_bkl_pins>;
+	};
+};
+
+
+/ {
+
+
+	backlight {
+		compatible = "pwm-backlight";
+		pwms = <&ehrpwm1 0 500000 0>;
+			brightness-levels = <0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100>;
+			default-brightness-level = <51>; /* index to the array above */
+	};
+
+};

@@ -1,0 +1,51 @@
+/*
+with TI am335x BSP 06.03.00.106
+with HAOYU / www.hotmcu.com cape
+greatcat@ms18.hinet.net
+20201231.2
+If this document helps you and buy street cats a fish can.
+*/
+//
+
+#include <dt-bindings/interrupt-controller/irq.h>
+
+&am33xx_pinmux {
+
+
+		i2c1_pins: pinmux_i2c1_pins {
+			pinctrl-single,pins = <
+				AM33XX_IOPAD(0x958, PIN_INPUT | MUX_MODE2)      /* spi0_d1.i2c1_sda_mux3 */
+				AM33XX_IOPAD(0x95c, PIN_INPUT | MUX_MODE2)      /* spi0_cs0.i2c1_scl_mux3 */
+			>;
+	   	};
+
+		gcat_ts_int_pins: gcat_ts_int_pins {
+			pinctrl-single,pins = <
+				//0x044 0x27      /* CAP_TSC gpmc_a1.gpio1_17, INPUT | MODE7 */
+				AM33XX_IOPAD(0x844, PIN_INPUT | MUX_MODE7) /* gpmc_a1.gpio1_17 */
+
+				//0x1a4 0x0f //gpio3_19 mode7 output
+				AM33XX_IOPAD(0x9A4, PIN_OUTPUT | MUX_MODE7)
+			>;      
+		};
+
+};
+
+&i2c1 {
+	pinctrl-names = "default";
+	pinctrl-0 = <&i2c1_pins>;
+
+	status = "okay";
+	clock-frequency = <400000>;
+
+        ft5x06_ts: ft5x06_ts@38 {
+                compatible = "edt,edt-ft5x06";
+		pinctrl-names = "default";
+		pinctrl-0 = <&gcat_ts_int_pins>;
+                reg = <0x38>;
+		reset-gpios = <&gpio3 19 GPIO_ACTIVE_LOW>;
+                interrupt-parent = <&gpio1>;
+                interrupts = <17 IRQ_TYPE_EDGE_FALLING>;
+		status = "okay";
+        };
+};
